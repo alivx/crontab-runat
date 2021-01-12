@@ -79,8 +79,7 @@ def runCommand(command):
         print("There is an error with command {0}".format(command))
         sys.exit(1)
 
-
-if __name__ == "__main__":
+def main():
     try:
         while True:
             nextrun = args.cron.next(default_utc=utc)
@@ -91,3 +90,6 @@ if __name__ == "__main__":
         print("\nInterpreted")
         time.sleep(0.5)
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()
