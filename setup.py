@@ -22,7 +22,7 @@ setup(
     setup_requires=requirements,
     author="Ali Saleh Baker",
     author_email="alivxlive@gmail.com",
-    url="https://github.com/alivx/Run-at-time-cron",
+    url="https://github.com/alivx/runat",
     license="GNU",
     packages=find_packages(exclude=["ez_setup", "tests*"]),
     package_data={"runat":["templates/*"]},
