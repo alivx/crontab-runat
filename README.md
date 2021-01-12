@@ -12,6 +12,11 @@ Tiny replacement for crontab
 * Anything you mayneed 🚑.
 
 
+## Install
+```
+pip install runat
+```
+
 ## Notes
 * Crontab running on your timezone, if you want to use UTC pass arg --utc
 
@@ -79,32 +84,6 @@ $ source env/bin/activate
 $ runat --help
 
 
-### run pytest / coverage
-
-$ make test
-```
-
-
-### Releasing to PyPi
-
-Before releasing to PyPi, you must configure your login credentials:
-
-**~/.pypirc**:
-
-```
-[pypi]
-username = YOUR_USERNAME
-password = YOUR_PASSWORD
-```
-
-Then use the included helper function via the `Makefile`:
-
-```
-$ make dist
-
-$ make dist-upload
-```
-
 ## Deployments
 
 ### Docker
@@ -112,7 +91,7 @@ $ make dist-upload
 #### Note
 If you want to work on local file you should mount it to the container using `-v`
 
-Included is a basic `Dockerfile` for building and distributing `Redis Mirror `,
+Included is a basic `Dockerfile` for building and distributing `runat `,
 and can be built with the included `make` helper:
 
 ```
@@ -120,3 +99,14 @@ $ make docker
 
 $ docker run -it runat --help
 ```
+
+
+License
+-------
+
+ GNU GENERAL PUBLIC LICENSE
+
+Author Information
+------------------
+
+The tool was originally developed by [Ali Saleh Baker](https://www.linkedin.com/in/alivx/).
