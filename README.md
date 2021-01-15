@@ -1,5 +1,5 @@
 # Cronlike cli :) 
-<img src="https://raw.githubusercontent.com/alivx/runat/master/other/logo.PNG" alt="logo" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/alivx/crontab-runat/master/other/logo.PNG" alt="logo" style="zoom:50%;" />
 
 
 # runat
