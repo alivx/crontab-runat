@@ -1,8 +1,38 @@
 import sys
 import time
 import os
-import croniter
 import click
+from datetime import datetime, timedelta
+
+class CronParser:
+    def __init__(self, cron_expression):
+        self.fields = cron_expression.split()
+
+    def get_next(self, start_time):
+        dt = start_time
+        while True:
+            dt += timedelta(minutes=1)
+            if all(self._match_field(dt, field, index) for index, field in enumerate(self.fields)):
+                return dt
+
+    @staticmethod
+    def _match_field(dt, field, index):
+        if field == '*':
+            return True
+        else:
+            if index == 0:
+                return dt.minute in map(int, field.split(','))
+            elif index == 1:
+                return dt.hour in map(int, field.split(','))
+            elif index == 2:
+                return dt.day in map(int, field.split(','))
+            elif index == 3:
+                return dt.month in map(int, field.split(','))
+            elif index == 4:
+                return dt.weekday() in map(int, field.split(','))
+        return False
+    
+    
 
 # Convert seconds to a human-readable time string
 def display_time(seconds, granularity=3):
@@ -51,8 +81,8 @@ def run_command(command):
     except Exception as e:
         print(f"There is an error with command {command}: {e}")
         sys.exit(1)
-
-# Main function using click
+        
+        
 @click.command()
 @click.option("-c", "--cron", required=True, type=str, help='Cron like syntax "22 23 * * *"')
 @click.option("-d", "--do", "do_", required=True, type=str, help="List of command or shell script")
@@ -64,13 +94,13 @@ def main(cron, do_):
         cron (str): Cron-like syntax string.
         do_ (str): List of command or shell script.
     """
-    cron_iter = croniter.croniter(cron, start_time=time.time())
+    cron_parser = CronParser(cron)
 
     try:
         while True:
             # Calculate next run time and wait
-            nextrun = cron_iter.get_next()
-            wait_time = nextrun - time.time()
+            nextrun = cron_parser.get_next(datetime.now())
+            wait_time = (nextrun - datetime.now()).total_seconds()
             print(f"> The next run in {display_time(wait_time)}")
             time.sleep(wait_time)
 
