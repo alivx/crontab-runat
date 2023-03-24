@@ -1,60 +1,31 @@
 import sys
-import argparse
 import time
 import os
-from crontab import CronTab
+import croniter
+import click
 
-# Create the parser
-aParser = argparse.ArgumentParser(
-    description="tiny replacement cron for different usages"
-)
-# Add the arguments
-aParser.add_argument(
-    "--cron", "-c", required=True, type=CronTab, help='cron like syntax "22 23 * * *"'
-)
-aParser.add_argument(
-    "--do", "-d", required=True, type=str, help="list of command or shell script"
-)
-aParser.add_argument(
-    "--utc",
-    "-u",
-    default=False,
-    help="Use UTC time",
-    action="store_true",
-)
-args = aParser.parse_args()
-
-
-# Check if no arg, show help and exit
-if len(sys.argv) < 2:
-    aParser.print_usage()
-    sys.exit(1)
-
-# Arg var
-cron = args.cron
-do = args.do
-utc = args.utc
-
-intervals = (
-    ("weeks", 604800),
-    ("days", 86400),
-    ("hours", 3600),
-    ("minutes", 60),
-    ("seconds", 1),
-)
-
-
+# Convert seconds to a human-readable time string
 def display_time(seconds, granularity=3):
-    """Convert seconds to readable time
+    """
+    Convert seconds to a human-readable time string.
 
     Args:
-        seconds int: seconds
-        granularity int: item count
+        seconds (int): Number of seconds.
+        granularity (int): Number of time units to display.
 
     Returns:
-        str: time in readable format
+        str: Human-readable time string.
     """
+    intervals = (
+        ("weeks", 604800),
+        ("days", 86400),
+        ("hours", 3600),
+        ("minutes", 60),
+        ("seconds", 1),
+    )
     result = []
+
+    # Calculate time units and append to the result list
     for name, count in intervals:
         value = seconds // count
         if value:
@@ -62,30 +33,51 @@ def display_time(seconds, granularity=3):
             if value == 1:
                 name = name.rstrip("s")
             result.append("{} {}".format(value, name))
+
     return ", ".join(result[:granularity])
 
-
-def runCommand(command):
-    """Run shell command
+# Execute a shell command and print its output
+def run_command(command):
+    """
+    Execute a shell command and print its output.
 
     Args:
-        command str: shell script
+        command (str): Shell command to execute.
     """
     try:
-        stream = os.popen(do)
+        stream = os.popen(command)
         output = stream.read()
         print(output)
     except Exception as e:
-        print("There is an error with command {0}".format(command))
+        print(f"There is an error with command {command}: {e}")
         sys.exit(1)
 
-def main():
+# Main function using click
+@click.command()
+@click.option("-c", "--cron", required=True, type=str, help='Cron like syntax "22 23 * * *"')
+@click.option("-d", "--do", "do_", required=True, type=str, help="List of command or shell script")
+def main(cron, do_):
+    """
+    A tiny replacement for cron for different usages.
+
+    Args:
+        cron (str): Cron-like syntax string.
+        do_ (str): List of command or shell script.
+    """
+    cron_iter = croniter.croniter(cron, start_time=time.time())
+
     try:
         while True:
-            nextrun = args.cron.next(default_utc=utc)
-            print("> The next run  in {}".format(display_time(nextrun)))
-            time.sleep(args.cron.next(default_utc=utc))
-            runCommand(do)
+            # Calculate next run time and wait
+            nextrun = cron_iter.get_next()
+            wait_time = nextrun - time.time()
+            print(f"> The next run in {display_time(wait_time)}")
+            time.sleep(wait_time)
+
+            # Execute the command
+            run_command(do_)
+    except Exception as e:
+        print(e)
     finally:
         print("\nInterpreted")
         time.sleep(0.5)

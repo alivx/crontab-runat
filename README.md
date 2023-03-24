@@ -1,98 +1,84 @@
-# Cronlike cli :) 
+# Runat: A Tiny Replacement for Crontab
+
 <img src="https://raw.githubusercontent.com/alivx/crontab-runat/master/other/logo.PNG" alt="logo" style="zoom:50%;" />
 
+Welcome to Runat, a CLI tool that offers a simple and efficient way to replace crontab. It provides a reliable solution for various use cases, including running it inside containers, when crontab is broken, for security compliance, and anything else you may need.
 
-# runat
-Tiny replacement for crontab
+## **Installation**
 
-## Use Case/Note
-* Run it inside container 🥚.
-* Your crontab is broken 🐛.
-* For security compliance 🔒.
-* Anything you mayneed 🚑.
+Runat is easy to install via pip. You can install it using the following command:
 
-
-## Install
 ```
 pip install runat
 ```
 
-## Notes
-* Crontab running on your timezone, if you want to use UTC pass arg --utc
+## **Options**
 
-## Option
+To learn more about Runat's options, you can type **`runat --help`**. The following optional arguments are available:
 
 ```
-> runat --help
-usage: main.py [-h] --cron CRON --do DO [--utc]
+Usage: runat [OPTIONS]
 
-tiny replacement cron for different usages
+  A tiny replacement for cron for different usages.
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --cron CRON, -c CRON  cron like syntax "22 23 * * *"
-  --do DO, -d DO        list of command or shell script
-  --utc, -u             Use UTC time
+  Args:     cron (str): Cron-like syntax string.     do_ (str): List of
+  command or shell script.
+
+Options:
+  -c, --cron TEXT  Cron like syntax "22 23 * * *"  [required]
+  -d, --do TEXT    List of command or shell script  [required]
+  --help           Show this message and exit.
 ```
 
-## Useages
-```Bash
+## **Usage**
+
+Here's how you can use Runat:
+
+```
 runat --cron "01 23 * * *"  --do "cd /srv/;bash cleanTemp.sh | tee  -a /var/log/cleanTemp.log"
 
-#To use UTC time
-runat --cron "01 23 * * *"  --do "cd /srv/;bash cleanTemp.sh | tee  -a /var/log/cleanTemp.log" --utc
-> The next run  in 1.0 hour, 54.0 minutes, 44.0 seconds
 ```
 
-## Exmaple output:
+## **Example Output**
+
+Here's an example of what Runat's output might look like:
+
 ```
 runat --cron "01 23 * * *"  --do "cd /srv/;bash cleanTemp.sh | tee  -a /var/log/cleanTemp.log"
 > The next run  in 23.0 hours, 59.0 minutes, 56.0 seconds
 ```
 
-## Installation using pypi
+## **Installation via PyPI**
+
+To install Runat via PyPI, simply run the following command:
+
 ```
 pip install runat
 ```
 
-## Installation
+## **Development**
 
-```
-$ pip install -r requirements.txt
-
-$ pip install setup.py
-```
-
-## Development
-
-This project includes a number of helpers in the `Makefile` to streamline common development tasks.
-
-### Environment Setup
-
-The following demonstrates setting up and working with a development environment:
+Runat includes a number of helpers in the **`Makefile`** to streamline common development tasks. You can set up your development environment using the following steps:
 
 ```
 ### create a virtualenv for development
-
 $ make virtualenv
 
 $ source env/bin/activate
 
-
 ### run runat cli application
-
 $ runat --help
+```
 
+## **Deployments**
 
-## Deployments
+### **Docker**
 
-### Docker
+### Note
 
-#### Note
-If you want to work on local file you should mount it to the container using `-v`
+If you want to work on local file, you should mount it to the container using **`-v`**.
 
-Included is a basic `Dockerfile` for building and distributing `runat `,
-and can be built with the included `make` helper:
+To build and distribute Runat using Docker, you can use the following commands:
 
 ```
 $ make docker
@@ -100,13 +86,10 @@ $ make docker
 $ docker run -it runat --help
 ```
 
+## **License**
 
-License
--------
+Runat is licensed under the GNU GENERAL PUBLIC LICENSE.
 
- GNU GENERAL PUBLIC LICENSE
+## **Author Information**
 
-Author Information
-------------------
-
-The tool was originally developed by [Ali Saleh Baker](https://www.linkedin.com/in/alivx/).
+The tool was originally developed by **[Ali Saleh Baker](https://www.linkedin.com/in/alivx/)**.
