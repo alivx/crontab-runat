@@ -1,4 +1,4 @@
-# Runat: A Tiny Replacement for Crontab
+# Runat: A Tiny Replacement for Crontab as cli command
 
 <img src="https://raw.githubusercontent.com/alivx/crontab-runat/master/other/logo.PNG" alt="logo" style="zoom:50%;" />
 
